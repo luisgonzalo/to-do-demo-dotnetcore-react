@@ -14,4 +14,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PerfectChannel.Implementations\PerfectChannel.Implementations.csproj" />
+    <ProjectReference Include="..\PerfectChannel.Interfaces\PerfectChannel.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

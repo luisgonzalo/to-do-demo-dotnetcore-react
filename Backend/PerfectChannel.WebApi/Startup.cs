@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PerfectChannel.Implementations;
+using PerfectChannel.Interfaces;
 
 namespace PerfectChannel.WebApi
 {
@@ -21,6 +23,8 @@ namespace PerfectChannel.WebApi
             services.AddControllers();
             
             ConfigureCors(services);
+
+            services.AddScoped<ITodoService, TodoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
