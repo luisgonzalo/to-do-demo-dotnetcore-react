@@ -3,11 +3,15 @@ using PerfectChannel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PerfectChannel.Implementations
 {
     public class TodoService : ITodoService
     {
+        // in memory list, shared by all clients, lost when the backend is stopped
+        private static IEnumerable<TodoItem> _todoItems = new List<TodoItem>();
+
         public bool Add(TodoItem todoItem)
         {
             throw new NotImplementedException();
@@ -18,9 +22,10 @@ namespace PerfectChannel.Implementations
             throw new NotImplementedException();
         }
 
-        public List<TodoItem> GetItems()
+        public Task<IEnumerable<TodoItem>> GetAllTodoItemsAsync()
         {
-            throw new NotImplementedException();
+            return (new TaskFactory()).StartNew(() => _todoItems);
         }
+
     }
 }
