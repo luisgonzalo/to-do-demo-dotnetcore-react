@@ -12,6 +12,8 @@ namespace PerfectChannel.Interfaces
 
         bool ChangeStatus(int todoItemId, bool isComplete);
         
-        Task<IEnumerable<TodoItem>> GetAllTodoItemsAsync();
+        Task<TodoItem[]> GetAllTodoItemsAsync();
+
+        Task<TodoItem> GetTodoItemAsync(int id);
     }
 }

@@ -28,7 +28,21 @@ namespace PerfectChannel.WebApi.Controllers
             {
                 return NoContent();
             }
-            return new ActionResult<IEnumerable<TodoItem>>(todoItems);
+            return Ok(todoItems);
+        }
+
+        // GET: api/Task/1
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
+        {
+            var todoItem = await _todoService.GetTodoItemAsync(id);
+
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
+
+            return todoItem;
         }
     }
 }
