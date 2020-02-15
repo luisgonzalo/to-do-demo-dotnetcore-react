@@ -50,6 +50,12 @@ export const ToDoList = () => {
     setItems([...items]);
   };
 
+  const handleKeyUp = (event: any) => {
+    if (event.keyCode === 13 && taskDescription !== '') {
+      handleAddTask();
+    }
+  };
+
   return (
     <main className={classes.content}>
       <div className={classes.appBarSpacer} />
@@ -65,6 +71,7 @@ export const ToDoList = () => {
                 value={taskDescription} 
                 variant="outlined"
                 fullWidth
+                onKeyUp={handleKeyUp}
               />
               <IconButton aria-label="add task" title="Add task" onClick={handleAddTask} disabled={taskDescription === ''} >
                 <AddIcon />
