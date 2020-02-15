@@ -15,5 +15,7 @@ namespace PerfectChannel.Interfaces
         Task<TodoItem[]> GetAllTodoItemsAsync();
 
         Task<TodoItem> GetTodoItemAsync(int id);
+
+        void ClearList();
     }
 }

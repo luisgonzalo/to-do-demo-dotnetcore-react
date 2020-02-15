@@ -21,7 +21,7 @@ namespace PerfectChannel.WebApi.Test.TodoServiceTests
         [TearDown]
         protected void TearDown()
         {
-            _todoService.Dispose();
+            _todoService.ClearList();
         }
 
         [Test]

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PerfectChannel.Implementations
 {
-    public class TodoService : ITodoService, IDisposable
+    public class TodoService : ITodoService
     {
         protected Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -92,7 +92,7 @@ namespace PerfectChannel.Implementations
             return result;
         }
 
-        public void Dispose()
+        public void ClearList()
         {
             _todoItems.Clear();
         }

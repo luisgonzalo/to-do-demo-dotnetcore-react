@@ -57,5 +57,18 @@ namespace PerfectChannel.WebApi.Controllers
             }
             return BadRequest();
         }
+
+        // PUT: api/Task
+        [HttpPut]
+        public IActionResult Put(TodoItem todoItem)
+        {
+            var updated = _todoService.ChangeStatus(todoItem.Id, todoItem.IsComplete);
+
+            if (updated)
+            {
+                return NoContent();
+            }
+            return BadRequest();
+        }
     }
 }
