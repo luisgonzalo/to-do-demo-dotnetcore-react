@@ -9,30 +9,40 @@ using System.Threading.Tasks;
 
 namespace PerfectChannel.Implementations
 {
-    public class TodoService : ITodoService
+    public class TodoService : ITodoService, IDisposable
     {
         protected Logger _logger = LogManager.GetCurrentClassLogger();
 
         // This implementation uses an in-memory list, shared by all clients, lost when the backend is stopped
-        private static List<TodoItem> _todoItems = new List<TodoItem>()
-        {
-            new TodoItem { Id = 1, Description = "First to-do item" },
-            new TodoItem { Id = 2, Description = "Second to-do item" },
-        };
+        private static List<TodoItem> _todoItems = new List<TodoItem>();
 
         public bool Add(TodoItem todoItem)
         {
             var added = false;
             try
             {
-                _todoItems.Add(todoItem);
-                added = true;
+                if (todoItem != null && !string.IsNullOrWhiteSpace(todoItem.Description))
+                {
+                    todoItem.Id = GenerateNewId();
+                    _todoItems.Add(todoItem);
+                    added = true;
+                }
             }
             catch(Exception e)
             {
                 _logger.Error(e, "Error adding to-do item");
             }
             return added;
+        }
+
+        private int GenerateNewId()
+        {
+            lock (_todoItems)
+            {
+                return _todoItems.Count == 0 ?
+                    1 :
+                    _todoItems.Max(item => item.Id) + 1;
+            }
         }
 
         public bool ChangeStatus(int todoItemId, bool isComplete)
@@ -80,6 +90,11 @@ namespace PerfectChannel.Implementations
                 _logger.Error(e, "Error loading item");
             }
             return result;
+        }
+
+        public void Dispose()
+        {
+            _todoItems.Clear();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace PerfectChannel.WebApi.Controllers
 
         // GET: api/Task/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItem>> GetTodoItem(int id)
+        public async Task<ActionResult<TodoItem>> Get(int id)
         {
             var todoItem = await _todoService.GetTodoItemAsync(id);
 
@@ -43,6 +43,19 @@ namespace PerfectChannel.WebApi.Controllers
             }
 
             return todoItem;
+        }
+
+        // POST: api/Task
+        [HttpPost]
+        public ActionResult<TodoItem> Post(TodoItem todoItem)
+        {
+            var added = _todoService.Add(todoItem);
+
+            if (added)
+            {
+                return CreatedAtAction(nameof(Get), new { id = todoItem.Id }, todoItem);
+            }
+            return BadRequest();
         }
     }
 }
