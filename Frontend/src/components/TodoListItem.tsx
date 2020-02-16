@@ -1,10 +1,10 @@
 import React from 'react';
-import { todoItem } from "../model/todoItem";
+import { TodoItem } from "../model/todoItem";
 import { ListItem, ListItemIcon, Checkbox, ListItemText } from '@material-ui/core';
 
 interface Props {
-  item: todoItem;
-  onCheckedChange(item: todoItem): void;
+  item: TodoItem;
+  onCheckedChange(item: TodoItem): void;
 }
 export const TodoListItem = (props: Props) => {
 const { item, onCheckedChange } = props;

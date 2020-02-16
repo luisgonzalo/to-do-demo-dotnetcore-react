@@ -3,6 +3,8 @@ import './App.css';
 import { Header } from './components/Header';
 import { ToDoList } from './components/ToDoList';
 import { makeStyles, CssBaseline } from '@material-ui/core';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,6 +17,7 @@ const App: React.FC = () => {
 
   return (
     <div className={classes.root}>
+      <ToastContainer />
       <CssBaseline />
       <Header />
       <ToDoList />

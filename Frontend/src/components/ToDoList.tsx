@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Grid, Paper, List, Divider, ListSubheader, IconButton, TextField } from '@material-ui/core';
-import { todoItem } from '../model/todoItem';
+import { TodoItem } from '../model/todoItem';
 import AddIcon from '@material-ui/icons/Add';
 import { TodoListItem } from './TodoListItem';
+import { todoListApi } from '../api/todoListApi';
+import { toast } from 'react-toastify';
 
 const useStyles = makeStyles(theme => ({
   appBarSpacer: theme.mixins.toolbar,
@@ -30,28 +32,65 @@ const useStyles = makeStyles(theme => ({
 
 export const ToDoList = () => {
   const classes = useStyles();
-  const [items, setItems] = useState<todoItem[]>([]);
-  const [taskDescription, setTaskDescription] = useState<string>("");
+  const [items, setItems] = useState<TodoItem[]>([]);
+  const [itemDescription, setItemDescription] = useState<string>("");
+  const [isLoaded, setIsLoaded] = useState<boolean>();
   
+  useEffect(
+    () => {
+      if (isLoaded === undefined) {
+        setIsLoaded(false);
+        todoListApi.getTodoItems()
+          .then(
+            (result) => {
+              setIsLoaded(true);
+              setItems(result);
+            },
+            (error) => {
+              toast.error(error.message);
+            }
+          );
+      }
+    },
+    [isLoaded]
+  );
+
   const pendingTodoItems = items.filter(item => !item.isComplete);
   const completedItems = items.filter(item => item.isComplete);
 
-  const handleTaskChange = (value: string) => {
-    setTaskDescription(value);
+  const handleItemDescriptionChange = (value: string) => {
+    setItemDescription(value);
   };
 
   const handleAddTask = () => {
-    setItems([...items, { id: items.length + 1, description: taskDescription, isComplete: false }]);
-    setTaskDescription('');
+    todoListApi.addTodoItem({ id: items.length + 1, description: itemDescription, isComplete: false })
+      .then(
+        () => {
+          setItemDescription('');
+          setIsLoaded(undefined);
+        },
+        (error) => {
+          toast.error(error.message);
+        }
+      );
+    
   };
 
-  const handleCheckedChange = (item: todoItem) => {
+  const handleCheckedChange = (item: TodoItem) => {
     item.isComplete = !item.isComplete;
-    setItems([...items]);
+    todoListApi.changeItemStatus(item)
+      .then(
+        () => {
+          setIsLoaded(undefined);
+        },
+        (error) => {
+          toast.error(error.message);
+        }
+      );
   };
 
   const handleKeyUp = (event: any) => {
-    if (event.keyCode === 13 && taskDescription !== '') {
+    if (event.keyCode === 13 && itemDescription !== '') {
       handleAddTask();
     }
   };
@@ -67,13 +106,13 @@ export const ToDoList = () => {
                 required
                 id="outlined-required"
                 label="Add Task"
-                onChange={(e) => handleTaskChange(e.target.value)}
-                value={taskDescription} 
+                onChange={(e) => handleItemDescriptionChange(e.target.value)}
+                value={itemDescription} 
                 variant="outlined"
                 fullWidth
                 onKeyUp={handleKeyUp}
               />
-              <IconButton aria-label="add task" title="Add task" onClick={handleAddTask} disabled={taskDescription === ''} >
+              <IconButton aria-label="add task" title="Add task" onClick={handleAddTask} disabled={itemDescription === ''} >
                 <AddIcon />
               </IconButton>
             </Paper>

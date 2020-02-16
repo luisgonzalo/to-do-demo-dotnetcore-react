@@ -9,6 +9,7 @@ namespace PerfectChannel.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class TaskController : ControllerBase
     {
         private readonly ITodoService _todoService;

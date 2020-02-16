@@ -1,4 +1,4 @@
-export interface todoItem {
+export interface TodoItem {
   id: number;
   description: string;
   isComplete: boolean;
